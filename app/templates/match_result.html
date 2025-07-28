@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Search Results{% endblock %}
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center text-info">Matching Lost Items</h2>
+  {% if items %}
+    {% for item in items %}
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">{{ item.item_name }}</h5>
+          <p class="card-text"><strong>Description:</strong> {{ item.description }}</p>
+          <p class="card-text"><strong>Location:</strong> {{ item.location }}</p>
+          <p class="card-text"><strong>Student:</strong> {{ item.student_name }} ({{ item.roll_number }} - {{ item.branch }})</p>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p class="text-danger text-center">No matching lost items found.</p>
+  {% endif %}
+</div>
+{% endblock %}
