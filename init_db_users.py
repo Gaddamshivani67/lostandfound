@@ -1,6 +1,6 @@
-from app import app, db
-from app.models import User
-from app import bcrypt
+from lostandfound_app import app, db
+from lostandfound_app.models import User
+from lostandfound_app import bcrypt
 
 def create_admin_user():
     with app.app_context():
