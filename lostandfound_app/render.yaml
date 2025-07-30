@@ -7,3 +7,5 @@ services:
     envVars:
       - key: FLASK_ENV
         value: production
+      - key: DATABASE_URL
+        value: sqlite:///app.db  # (Only if you're using SQLite)
