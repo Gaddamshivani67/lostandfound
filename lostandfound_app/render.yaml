@@ -1,9 +1,8 @@
-
 services:
   - type: web
     name: lostandfound-app
     env: python
-    buildCommand: ""
+    buildCommand: pip install -r requirements.txt
     startCommand: gunicorn run:app
     envVars:
       - key: FLASK_ENV
