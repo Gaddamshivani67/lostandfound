@@ -1,27 +1,30 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% block title %}Found Items{% endblock %}
 {% block content %}
-<h2>Post Found Item</h2>
-<form method="POST">
-    <div class="mb-3">
-        <label class="form-label">Item Type</label>
-        <input type="text" name="item_type" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Description</label>
-        <textarea name="description" class="form-control" required></textarea>
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Student Name</label>
-        <input type="text" name="student_name" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Roll Number</label>
-        <input type="text" name="roll_number" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Branch</label>
-        <input type="text" name="branch" class="form-control" required>
-    </div>
-    <button type="submit" class="btn btn-success">Post</button>
-</form>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Found Items</h2>
+    {% if items %}
+        <div class="row">
+            {% for item in items %}
+                {% if item.status == 'Found' %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">{{ item.item_name }}</h5>
+                                <p class="card-text"><strong>Type:</strong> {{ item.item_type }}</p>
+                                <p class="card-text"><strong>Description:</strong> {{ item.description }}</p>
+                                <p class="card-text"><strong>Branch:</strong> {{ item.branch }}</p>
+                                <hr>
+                                <p class="card-text mb-0"><strong>Posted By:</strong> {{ item.user.name }}</p>
+                                <p class="card-text"><strong>Roll Number:</strong> {{ item.user.roll_number }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center">No found items posted yet.</p>
+    {% endif %}
+</div>
 {% endblock %}

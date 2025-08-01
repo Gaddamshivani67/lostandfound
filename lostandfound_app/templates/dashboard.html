@@ -2,41 +2,54 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2 class="text-center mb-4">Your Posted Items</h2>
+    <h2 class="text-center mb-2 text-primary">Welcome, {{ current_user.name }}!</h2>
+    <p class="text-center mb-4">Here are the items you’ve posted.</p>
 
     <div class="text-end mb-3">
-        <a href="{{ url_for('post_item') }}" class="btn btn-primary">Post Lost/Found Item</a>
+        <a href="{{ url_for('routes.post_item') }}" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Post Lost/Found Item
+        </a>
     </div>
 
     {% if items %}
-    <table class="table table-bordered table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th>Name</th>
-                <th>Item Type</th>
-                <th>Description</th>
-                <th>Student Name</th>
-                <th>Roll No</th>
-                <th>Branch</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in items %}
-            <tr>
-                <td>{{ item.item_name }}</td>
-                <td>{{ item.item_type }}</td>
-                <td>{{ item.description }}</td>
-                <td>{{ item.user.name }}</td>
-                <td>{{ item.user.roll_number }}</td>
-                <td>{{ item.branch }}</td>
-                <td>{{ item.status }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Item Name</th>
+                    <th>Item Type</th>
+                    <th>Description</th>
+                    <th>Student Name</th>
+                    <th>Roll No</th>
+                    <th>Branch</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.item_name }}</td>
+                    <td>{{ item.item_type }}</td>
+                    <td>{{ item.description }}</td>
+                    <td>{{ item.user.name }}</td>
+                    <td>{{ item.user.roll_number }}</td>
+                    <td>{{ item.branch }}</td>
+                    <td>
+                        {% if item.status == 'Lost' %}
+                            <span class="badge bg-danger">{{ item.status }}</span>
+                        {% else %}
+                            <span class="badge bg-success">{{ item.status }}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     {% else %}
-    <p class="text-center">You haven't posted any items yet.</p>
+    <div class="alert alert-info text-center">
+        You haven't posted any items yet.
+    </div>
     {% endif %}
 </div>
 {% endblock %}

@@ -1,34 +1,55 @@
 {% extends 'base.html' %}
+{% block title %}Post Lost/Found Item{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2 class="text-center mb-4">Post a Lost or Found Item</h2>
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white text-center">
+            <h3 class="mb-0">Post Lost/Found Item</h3>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="item_name" class="form-label">Item Name</label>
+                    <input type="text" class="form-control" id="item_name" name="item_name" required placeholder="e.g., Wallet, Mobile Phone">
+                </div>
 
-    <form method="POST">
-        <div class="mb-3">
-            <label for="item_name" class="form-label">Name</label>
-            <input type="text" class="form-control" id="item_name" name="item_name" required>
+                <div class="mb-3">
+                    <label for="item_type" class="form-label">Item Type</label>
+                    <select class="form-select" id="item_type" name="item_type" required>
+                        <option value="">Select Type</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Clothing">Clothing</option>
+                        <option value="Documents">Documents</option>
+                        <option value="Accessories">Accessories</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="3" required placeholder="Brief details about the item..."></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="branch" class="form-label">Branch</label>
+                    <input type="text" class="form-control" id="branch" name="branch" required placeholder="e.g., CSE, ECE, MECH">
+                </div>
+
+                <div class="mb-3">
+                    <label for="status" class="form-label">Status</label>
+                    <select class="form-select" id="status" name="status" required>
+                        <option value="">Select Status</option>
+                        <option value="Lost">Lost</option>
+                        <option value="Found">Found</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-success w-100">
+                    <i class="bi bi-upload"></i> Submit Item
+                </button>
+            </form>
         </div>
-        <div class="mb-3">
-            <label for="item_type" class="form-label">Item Type</label>
-            <input type="text" class="form-control" id="item_type" name="item_type" required>
-        </div>
-        <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea class="form-control" id="description" name="description" required></textarea>
-        </div>
-        <div class="mb-3">
-            <label for="status" class="form-label">Status</label>
-            <select class="form-select" id="status" name="status" required>
-                <option value="Lost">Lost</option>
-                <option value="Found">Found</option>
-            </select>
-        </div>
-        <div class="mb-3">
-            <label for="branch" class="form-label">Branch</label>
-            <input type="text" class="form-control" id="branch" name="branch" required>
-        </div>
-        <button type="submit" class="btn btn-success">Submit Item</button>
-    </form>
+    </div>
 </div>
 {% endblock %}

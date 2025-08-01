@@ -1,22 +1,18 @@
-from flask import render_template, redirect, url_for, flash, request
-from lostandfound_app import app, db  # ✅ you can safely import app here
-
+from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
-# ✅ Use only db import here
-from lostandfound_app import db
-from lostandfound_app.models import User, Item
+from .models import db, User, Item
 
+# ✅ Create a Blueprint
+routes = Blueprint('routes', __name__)
 
-
-
-@app.route('/')
+@routes.route('/')
 def home():
     return render_template('index.html')
 
-@app.route('/signup', methods=['GET', 'POST'])
+@routes.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
         name = request.form['name']
@@ -26,45 +22,56 @@ def signup():
 
         if User.query.filter_by(email=email).first():
             flash('Email already registered.')
-            return redirect(url_for('signup'))
+            return redirect(url_for('routes.signup'))
 
-        user = User(name=name, roll_number=roll_number, email=email, password=password)
+        user = User(username=name, name=name, roll_number=roll_number, email=email, password=password)
         db.session.add(user)
         db.session.commit()
         flash('Signup successful. Please log in.')
-        return redirect(url_for('login'))
+        return redirect(url_for('routes.login'))
 
     return render_template('signup.html')
 
-@app.route('/login', methods=['GET', 'POST'])
+@routes.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
-        user = User.query.filter_by(email=email).first()
-
-        if user and check_password_hash(user.password, password):
-            login_user(user)
-            return redirect(url_for('dashboard'))
-        else:
-            flash('Invalid credentials.')
-            return redirect(url_for('login'))
-
+        try:
+            email = request.form['email']
+            password = request.form['password']
+            print(f"Email entered: {email}, Password entered: {password}")
+            
+            user = User.query.filter_by(email=email).first()
+            if user and check_password_hash(user.password, password):
+                login_user(user)
+                print("Login successful")
+                return redirect(url_for('routes.dashboard'))
+            else:
+                flash("Invalid email or password", "danger")
+                return redirect(url_for('routes.login'))
+        except Exception as e:
+            import traceback
+            print("Error during login:\n", traceback.format_exc())
+            flash("An unexpected error occurred.", "danger")
+            return redirect(url_for('routes.login'))
     return render_template('login.html')
 
-@app.route('/logout')
+
+
+
+@routes.route('/logout')
 @login_required
 def logout():
     logout_user()
     flash('Logged out successfully.')
-    return redirect(url_for('home'))
+    return redirect(url_for('routes.home'))
 
-@app.route('/dashboard')
+@routes.route('/dashboard')
 @login_required
 def dashboard():
     items = Item.query.filter_by(user_id=current_user.id).all()
     return render_template('dashboard.html', items=items)
-@app.route('/post', methods=['GET', 'POST'])
+
+@routes.route('/post', methods=['GET', 'POST'])
 @login_required
 def post_item():
     if request.method == 'POST':
@@ -80,25 +87,22 @@ def post_item():
             description=description,
             status=status,
             branch=branch,
-            user_id=current_user.id,
-            student_name=current_user.name,
-            roll_number=current_user.roll_number
+            user_id=current_user.id
         )
 
         db.session.add(new_item)
         db.session.commit()
         flash('Item posted successfully!', 'success')
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('routes.dashboard'))
 
     return render_template('post_item.html')
 
-
-@app.route('/items')
+@routes.route('/items')
 def view_items():
     items = Item.query.all()
     return render_template('view_items.html', items=items)
 
-@app.route('/forgot-password', methods=['GET', 'POST'])
+@routes.route('/forgot-password', methods=['GET', 'POST'])
 def forgot_password():
     if request.method == 'POST':
         email = request.form['email']
@@ -108,7 +112,7 @@ def forgot_password():
             user.password = generate_password_hash(new_password)
             db.session.commit()
             flash('Password reset successfully.', 'success')
-            return redirect(url_for('login'))
+            return redirect(url_for('routes.login'))
         else:
             flash('User not found.', 'danger')
     return render_template('forgot_password.html')

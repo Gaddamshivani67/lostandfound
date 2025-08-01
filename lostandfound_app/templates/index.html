@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="text-center mt-5">
-    <h1 class="display-4 text-primary">Vaagdevi College of Engineering</h1>
-    <p class="lead mt-3">Lost & Found Portal</p>
-    <a href="{{ url_for('login') }}" class="btn btn-primary m-2">Login</a>
-    <a href="{{ url_for('signup') }}" class="btn btn-success m-2">Sign Up</a>
-    <a href="{{ url_for('view_items') }}" class="btn btn-info m-2">View Items</a>
+<div class="container text-center mt-5">
+  <h1 class="display-4 text-primary">Welcome to Vaagdevi College Lost and Found Portal</h1>
+  <p class="lead mt-4">Easily report and find lost items within the campus.</p>
+  {% if current_user.is_authenticated %}
+    <a href="{{ url_for('routes.view_items') }}" class="btn btn-outline-primary btn-lg mt-4">View Items</a>
+  {% else %}
+    <a href="{{ url_for('routes.login') }}" class="btn btn-outline-success btn-lg mt-4">Login to Get Started</a>
+  {% endif %}
 </div>
 {% endblock %}

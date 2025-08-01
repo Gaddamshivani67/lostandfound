@@ -1,16 +1,34 @@
 {% extends 'base.html' %}
 
+{% block title %}All Lost & Found Items{% endblock %}
+
 {% block content %}
-<h2>All Reported Items</h2>
-{% for item in items %}
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5 class="card-title">{{ item.item_type }} - {{ item.description }}</h5>
-            <p class="card-text">Student: {{ item.student_name }} | {{ item.roll_no }} | {{ item.branch }}</p>
-            <p class="card-text"><small class="text-muted">Posted on: {{ item.date_posted.strftime('%Y-%m-%d') }}</small></p>
+<div class="container mt-4">
+    <h2 class="text-center mb-4">All Lost & Found Items</h2>
+
+    {% if items %}
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for item in items %}
+            <div class="col">
+                <div class="card shadow-sm border-primary h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <span class="badge bg-secondary">{{ item.status }}</span>
+                            {{ item.item_name }} ({{ item.item_type }})
+                        </h5>
+                        <p class="card-text">{{ item.description }}</p>
+                        <hr>
+                        <p class="mb-1"><strong>Student Name:</strong> {{ item.student_name }}</p>
+                        <p class="mb-1"><strong>Roll No:</strong> {{ item.roll_number }}</p>
+                        <p class="mb-1"><strong>Branch:</strong> {{ item.branch }}</p>
+                        <p class="text-muted mb-0"><small>Posted on: {{ item.date_posted.strftime('%Y-%m-%d') }}</small></p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
         </div>
-    </div>
-{% else %}
-    <p>No lost or found items have been posted yet.</p>
-{% endfor %}
+    {% else %}
+        <p class="text-center">No lost or found items have been posted yet.</p>
+    {% endif %}
+</div>
 {% endblock %}
